@@ -1,0 +1,51 @@
+/*
+Theme Name: WAR Parent Theme
+Author: BMO
+Description: WAR Parent Theme is a Bootstrap / Angular Single Page App Theme
+Version: 0.6
+License: MIT
+*/
+
+/***** Global / Custom Styling *****/
+.clear-btn {
+    background-color:inherit;
+    border: 0;
+    padding: 0 2vh 0 0;
+}
+.h1.clear-btn,.h2.clear-btn,.h3.clear-btn,.h4.clear-btn,.h5.clear-btn {
+    font-size: initial;
+}
+.clear-btn:hover {
+    background-color: inherit;
+}
+a.clear-btn:hover {
+    color: #337ab7;
+}
+.navbar-transparent {
+    background: none;
+}
+.jumbo-transparent {
+    background: none;
+}
+.white {
+    color: whitesmoke !important;
+}
+.black {
+    color: darkslategray !important;
+}
+
+a, button {
+    cursor: pointer;
+}
+
+.navbar {
+    border-radius: 0;
+}
+
+#main {
+    min-height: 100vh;
+}
+
+#body {
+    flex: 1;
+}

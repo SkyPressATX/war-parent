@@ -1,0 +1,4 @@
+<div>
+    <p ng-if="page" ng-bind-html="page.content.rendered | safeHTML"></p>
+    <p ng-if="! page"> It doesn't look like we found this page</p>
+</div>

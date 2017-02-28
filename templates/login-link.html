@@ -1,0 +1,4 @@
+<div>
+    <a ng-if="!currentUser" class="nav-link" style="color: {{font}};" ui-sref="login"><i class="icon ion-log-in"></i> Login</a>
+    <a ng-if="currentUser" class="nav-link" style="color: {{font}};" ng-click="logoutCB()"><i class="icon ion-log-out"></i> Logout</a>
+</div>

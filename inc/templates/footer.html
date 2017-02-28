@@ -1,0 +1,23 @@
+<div style="background-color: {{themeOptions.footerColor}};">
+    <div class="container px-0">
+        <nav class="nav justify-content-end" style="background-color: {{themeOptions.footerColor}};">
+
+            <a ng-repeat="link in themeOptions.footerLinks"
+                ng-if="link.uri"
+                class="nav-link"
+                target="_blank"
+                style="color: {{themeOptions.footerFontColor}};"
+                href="{{link.url + link.uri}}">
+                    <i class="{{link.logo}}"></i>
+            </a>
+
+            <a ng-if="siteOptions.currentUser"
+                class="nav-link"
+                style="color: {{themeOptions.footerFontColor}};"
+                ui-sref="admin">Admin</a>
+
+            <war-login size="link" font="themeOptions.footerFontColor"></war-login>
+
+        </nav>
+    </div>
+</div>
