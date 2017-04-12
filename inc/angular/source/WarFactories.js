@@ -79,31 +79,31 @@ extend.factory('$userRole',[
         }
     }
 ])
-.factory('$postData',[
-    '$apiCall',
-    '$warObject',
-    function($apiCall,$warObject){
-        var api_prefix = '/'+$warObject.api_prefix;
-        var getOne = function(slug,type){
-            return $apiCall.getLocal(api_prefix+'/wp/v2/'+type+'s?slug='+slug).then(function(resp){
-                return resp[0];
-            }, function(err){ return {'error':err}; });
-        };
-        var getAll = function(type){
-            return $apiCall.getLocal(api_prefix+'/wp/v2/'+type+'s').then(function(resp){
-                return resp;
-            }, function(err){ return {'error':err}; });
-        };
-
-        return {
-            getOne: function(slug,type){
-                return getOne(slug,type).then(function(resp){
-                    return resp;
-                });
-            },
-            getAll: function(type){
-                return getAll(type).then(function(resp){ return resp; });
-            }
-        }
-    }
-]);
+// .factory('$postData',[
+//     '$apiCall',
+//     '$warObject',
+//     function($apiCall,$warObject){
+//         var api_prefix = '/'+$warObject.api_prefix;
+//         var getOne = function(slug,type){
+//             return $apiCall.getLocal(api_prefix+'/wp/v2/'+type+'s?slug='+slug).then(function(resp){
+//                 return resp[0];
+//             }, function(err){ return {'error':err}; });
+//         };
+//         var getAll = function(type){
+//             return $apiCall.getLocal(api_prefix+'/wp/v2/'+type+'s').then(function(resp){
+//                 return resp;
+//             }, function(err){ return {'error':err}; });
+//         };
+//
+//         return {
+//             getOne: function(slug,type){
+//                 return getOne(slug,type).then(function(resp){
+//                     return resp;
+//                 });
+//             },
+//             getAll: function(type){
+//                 return getAll(type).then(function(resp){ return resp; });
+//             }
+//         }
+//     }
+// ]);
