@@ -17,30 +17,32 @@ extend.directive('warLogin', ['$warObject',function($warObject){
     var loginController = [
         '$scope',
         '$rootScope',
-        '$apiCall',
+        '$warClient',
+        '$warObject',
         '$state',
-        function($scope, $rootScope, $apiCall, $state){
+        function($scope, $rootScope, $warClient, $warObject, $state){
             $scope.currentUser = $rootScope.siteOptions.currentUser;
             $scope.loginAttempt = {username: null, password: null};
             $scope.loginCB = function(){
                 if($scope.error) $scope.error = false;
-                $apiCall.post('/login',$scope.loginAttempt).then(function(resp){
-                    if(resp.error){
-                        $scope.error = resp.error;
-                    }else{
-                        window.location.href = "/";
-                    }
-                });
+                $warClient.name( $warObject.api_namespace ).login.post( $scope.loginAttempt )
+                    .then(function(resp){
+                        if(resp.error){
+                            $scope.error = resp.error;
+                        }else{
+                            window.location.href = "/";
+                        }
+                    }).catch(function( err ){ console.log( err ); });
             };
             $scope.logoutCB = function(){
                 if($scope.error) $scope.error = false;
-                $apiCall.get('/logout').then(function(resp){
+                $warClient.name( $warObject.api_namespace ).logout.get().then(function(resp){
                     if(resp.error){
                         $scope.error = resp.error;
                     }else{
                         window.location.href = "/";
                     }
-                });
+                }).catch(function( err ){ console.log( err ); });
             }
         }
     ];

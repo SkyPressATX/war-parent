@@ -2,6 +2,7 @@ var extend = angular.module("$warExtend",[
     'ui.router',
     'colorpicker.module',
     'wysiwyg.module',
+    'warApiClient'
     // 'bootstrap.fileField'
 ]);
 

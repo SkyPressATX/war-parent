@@ -21,4 +21,11 @@ extend.config([
     }
 ]);
 
+extend.config([ '$warClientConfigProvider', '$warObject', function( $warClientConfigProvider, $warObject ){
+    $warClientConfigProvider.configure({
+        'api_prefix': $warObject.api_prefix,
+        'nonce': $warObject.nonce
+    });
+}])
+
 angular.module('$warModule', [ '$warExtend' ]);

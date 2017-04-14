@@ -22,16 +22,16 @@ extend.factory('$userRole',[
 ])
 .factory('$themeOptions',[
     '$rootScope',
-    '$apiCall',
-    '$q',
-    function( $rootScope, $apiCall, $q ){
+    '$warClient',
+    '$warObject',
+    function( $rootScope, $warClient, $warObject ){
         return {
             save: function(){
                 var optionObject = {
                     'siteName':$rootScope.siteOptions.siteName,
                     'json':angular.toJson($rootScope.themeOptions)
                 };
-                return $apiCall.post('/theme-options',optionObject).then(function(resp){
+                return $warClient.name( $warObject.api_namespace ).themeOptions.post( optionObject ).then(function(resp){
                     return true;
                 }).catch(function(err){
                     return false;
@@ -39,71 +39,15 @@ extend.factory('$userRole',[
             }
         }
     }
-])
-.factory('$apiCall', [
-    '$http',
-    '$q',
-    '$warObject',
-    function($http,$q,$warObject){
-        var apiCall = function(method, url, opt, append){
-            var namespace = '/' + $warObject.api_prefix + '/' + $warObject.api_namespace;
-            if(append === true) url = (namespace + url);
-            return $http({
-                method: method,
-                url: url,
-                data: opt,
-                headers: {'X-WP-Nonce': $warObject.nonce}
-            }).then(function(r){
-                return r.data;
-            }).catch(function(err){
-                return { error: err.statusText, data: err.data };
-            });
-        }
-
-        return {
-            getLocal : function(url){
-                return apiCall('GET', url, null, false);
-            },
-            get : function(url){
-                return apiCall('GET',url, null, true);
-            },
-            post : function(url,opt){
-                return apiCall('POST',url, opt, true);
-            },
-            put : function(url, opt){
-                return apiCall('PUT', url, opt, true);
-            },
-            delete : function(url){
-                return apiCall('DELETE', url, null, true);
-            }
-        }
-    }
-])
-.factory('$postData',[
-    '$apiCall',
-    '$warObject',
-    function($apiCall,$warObject){
-        var api_prefix = '/'+$warObject.api_prefix;
-        var getOne = function(slug,type){
-            return $apiCall.getLocal(api_prefix+'/wp/v2/'+type+'s?slug='+slug).then(function(resp){
-                return resp[0];
-            }, function(err){ return {'error':err}; });
-        };
-        var getAll = function(type){
-            return $apiCall.getLocal(api_prefix+'/wp/v2/'+type+'s').then(function(resp){
-                return resp;
-            }, function(err){ return {'error':err}; });
-        };
-
-        return {
-            getOne: function(slug,type){
-                return getOne(slug,type).then(function(resp){
-                    return resp;
-                });
-            },
-            getAll: function(type){
-                return getAll(type).then(function(resp){ return resp; });
-            }
-        }
-    }
 ]);
+
+// Looking for the old $warClient code?
+// I made it into it's own module. Look at the directory war-parent/inc/lib/warApiClient.js
+// ^_^
+
+extend.run( [ '$transitions', function( $transitions ){
+    $transitions.onBefore( { }, function( trans ){
+        var warClient = trans.injector().get( '$warClient' );
+        return warClient.discover();
+    } );
+}]);

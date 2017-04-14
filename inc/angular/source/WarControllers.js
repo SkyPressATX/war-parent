@@ -6,7 +6,6 @@ extend.controller('adminController', [
     '$userRole',
     function($scope, $rootScope, $userRole){
         $scope.userRole = $userRole.checkRole;
-        console.log( $rootScope );
         $scope.adminOptions = [
             {'title':'Theme Options','role':'administrator','uri':'theme-options'},
             {'title':'WP Admin','role':'administrator','uri':'wp-admin'}
