@@ -1,6 +1,26 @@
 var extend = angular.module('$warExtend');
 
 extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$warObject){
+
+    var genericView = {
+        "" :{
+            templateUrl: $warObject.warPath+"/inc/templates/general.html",
+            controller: "generalController"
+        }
+    };
+
+    var genericResolve = {
+        generalResolve: [ '$warClient', function( $warClient ){
+            return $warClient.name( 'wp/v2' ).pages.get( { slug: 'home', '_embed': true } )
+                .then( function( found ){
+                    return found[ 0 ];
+                })
+                .catch( function( err ){
+                    return { Error: err };
+                });
+        }]
+    };
+
     $warRoutesProvider.addRoute('home', {
         url:"",
         abstract: true,
@@ -36,7 +56,18 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
     $warRoutesProvider.addRoute('main', {
         parent: 'home',
         url: '/',
-        template: '<div class="m-x-auto m-t-3 p-t-3"><h4 class="text-xs-center">Temp Home Page <small><em>Edit Me</em></small></h4></div>'
+        resolve: {
+            generalResolve: [ '$warClient', function( $warClient ){
+                return $warClient.name( 'wp/v2' ).pages.get( { slug: 'home', '_embed': true } )
+                    .then( function( found ){
+                        return found[ 0 ];
+                    })
+                    .catch( function( err ){
+                        return { Error: err };
+                    });
+            }]
+        },
+        views: genericView
     });
     $warRoutesProvider.addRoute('login', {
         parent: 'home',
@@ -65,6 +96,46 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
                 controllerProvider: adminOptionsControllerFn
             }
         }
+    });
+
+    $warRoutesProvider.addRoute('post', {
+        parent: 'home',
+        url: $warObject.permalink,
+        resolve: {
+            generalResolve: [ '$warClient', '$stateParams', function( $warClient, $stateParams ){
+                return $warClient.name( 'wp/v2' ).posts.get( { slug: $stateParams.slug, '_embed': true } )
+                    .then( function( found ){
+                        return found[ 0 ];
+                    })
+                    .catch( function( err ){
+                        return { Error: err };
+                    });
+            }]
+        },
+        views: genericView
+    });
+    $warRoutesProvider.addRoute('page', {
+        parent: 'home',
+        url: '/:slug',
+        resolve: {
+            generalResolve: [ '$warClient', '$stateParams', function( $warClient, $stateParams ){
+                return $warClient.name( 'wp/v2' ).pages.get( { slug: $stateParams.slug, '_embed': true } )
+                    .then( function( found ){
+                        return found[ 0 ];
+                    })
+                    .catch( function( err ){
+                        return { Error: err };
+                    });
+            }]
+        },
+        views: genericView
+    });
+
+    $warRoutesProvider.addRoute('main', {
+        parent: 'home',
+        url: '/',
+        resolve: genericResolve,
+        views: genericView
     });
     adminOptionsTemplateFn.$inject = ['$stateParams'];
     adminOptionsControllerFn.$inject = ['$stateParams'];

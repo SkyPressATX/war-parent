@@ -18,6 +18,9 @@ extend.provider('$warRoutes', ['warRoutesConstant',function(warRoutesConstant){
     this.addRoute = function( name, route ){
         warRoutesConstant[name] = route;
     };
+    this.removeRoute = function( name ){
+        if( warRoutesConstant[ name ] ) delete warRoutesConstant[ name ];
+    }
     this.$get = function(){
         return warRoutesConstant;
     }
