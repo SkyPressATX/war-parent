@@ -26,11 +26,16 @@ if ( ! function_exists( 'war_get_scripts' ) ):
     function war_get_scripts(){
         /***** Top Parent Scripts *****/
         war_script_registrar( war_top_parent_scripts() );
+
+        do_action( 'war_angular_after_parent_scripts' );
+
         /***** Child Scripts *****/
         if( function_exists( 'war_child_scripts' ) ) war_script_registrar( war_child_scripts() );
+
+        do_action( 'war_angular_after_child_scripts' );
+
         /***** Bottom Parent Scripts *****/
         war_script_registrar( war_bottom_parent_scripts() );
-
 
     }
 endif;
@@ -81,6 +86,7 @@ if ( ! function_exists( 'war_top_parent_scripts' ) ) :
         );
     }
 endif;
+
 
 if ( ! function_exists( 'war_bottom_parent_scripts' ) ) :
     function war_bottom_parent_scripts() {
