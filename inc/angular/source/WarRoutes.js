@@ -10,8 +10,8 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
             "footer": {templateUrl: $warObject.warPath+"/inc/templates/footer.html", controller: 'footerController'},
         },
         resolve: {
-            warOptions: ['$rootScope', '$userRole', '$warOrm', function($rootScope, $userRole, $warOrm ){
-                return $warOrm.name( $warObject.api_namespace ).siteOptions.get()
+            warOptions: ['$rootScope', '$userRole', '$warClient', function($rootScope, $userRole, $warClient ){
+                return $warClient.name( $warObject.api_namespace ).siteOptions.get()
                     .then(function( options ){
                         $rootScope.siteOptions = options.siteOptions;
                         $rootScope.themeOptions = options.themeOptions;
@@ -23,8 +23,8 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
                     })
                     .catch(function( err ){ console.log( err ); });
             }],
-            warMenu: ['$rootScope', '$warOrm', '$userRole', function($rootScope, $warOrm, $userRole){
-                return $warOrm.name( $warObject.api_namespace ).menu.get()
+            warMenu: ['$rootScope', '$warClient', '$userRole', function($rootScope, $warClient, $userRole){
+                return $warClient.name( $warObject.api_namespace ).menu.get()
                 .then(function(headerMenu){
                     $rootScope.headerMenu = headerMenu;
                     return true;

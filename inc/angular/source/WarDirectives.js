@@ -17,15 +17,15 @@ extend.directive('warLogin', ['$warObject',function($warObject){
     var loginController = [
         '$scope',
         '$rootScope',
-        '$warOrm',
+        '$warClient',
         '$warObject',
         '$state',
-        function($scope, $rootScope, $warOrm, $warObject, $state){
+        function($scope, $rootScope, $warClient, $warObject, $state){
             $scope.currentUser = $rootScope.siteOptions.currentUser;
             $scope.loginAttempt = {username: null, password: null};
             $scope.loginCB = function(){
                 if($scope.error) $scope.error = false;
-                $warOrm.name( $warObject.api_namespace ).login.post( $scope.loginAttempt )
+                $warClient.name( $warObject.api_namespace ).login.post( $scope.loginAttempt )
                     .then(function(resp){
                         if(resp.error){
                             $scope.error = resp.error;
@@ -36,7 +36,7 @@ extend.directive('warLogin', ['$warObject',function($warObject){
             };
             $scope.logoutCB = function(){
                 if($scope.error) $scope.error = false;
-                $warOrm.name( $warObject.api_namespace ).logout.get().then(function(resp){
+                $warClient.name( $warObject.api_namespace ).logout.get().then(function(resp){
                     if(resp.error){
                         $scope.error = resp.error;
                     }else{
