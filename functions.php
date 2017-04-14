@@ -72,6 +72,10 @@ if ( ! function_exists( 'war_top_parent_scripts' ) ) :
                 'url' => get_template_directory_uri().'/inc/lib/wysiwyg.js',
                 'depends' => array('war_angular_js')
             ),
+            'war_api_client_js' => array(
+                'url' => get_template_directory_uri().'/inc/lib/warApiClient.js',
+                'depends' => array('war_angular_js')
+            ),
             // 'war_pre_child_js' => [
             //     'url' => get_template_directory_uri() . '/inc/angular/war-pre-child.js',
             //     'depends' => [ 'war_angular_js' ]
