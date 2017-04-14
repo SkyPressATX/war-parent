@@ -26,11 +26,16 @@ if ( ! function_exists( 'war_get_scripts' ) ):
     function war_get_scripts(){
         /***** Top Parent Scripts *****/
         war_script_registrar( war_top_parent_scripts() );
+
+        do_action( 'war_angular_after_parent_scripts' );
+
         /***** Child Scripts *****/
         if( function_exists( 'war_child_scripts' ) ) war_script_registrar( war_child_scripts() );
+
+        do_action( 'war_angular_after_child_scripts' );
+
         /***** Bottom Parent Scripts *****/
         war_script_registrar( war_bottom_parent_scripts() );
-
 
     }
 endif;
@@ -67,41 +72,46 @@ if ( ! function_exists( 'war_top_parent_scripts' ) ) :
                 'url' => get_template_directory_uri().'/inc/lib/wysiwyg.js',
                 'depends' => array('war_angular_js')
             ),
-            'war_pre_child_js' => [
-                'url' => get_template_directory_uri() . '/inc/angular/war-pre-child.js',
-                'depends' => [ 'war_angular_js' ]
-            ]
-            // 'war_extend_init' => array(
-            //     'url' => get_template_directory_uri().'/inc/angular/WarExtendInit.js',
-            //     'depends' => array('war_angular_js')
-            // ),
-            // 'war_extend_routes' => array(
-            //     'url' => get_template_directory_uri().'/inc/angular/WarRoutes.js'
-            // )
+            'war_api_client_js' => array(
+                'url' => get_template_directory_uri().'/inc/lib/warApiClient.js',
+                'depends' => array('war_angular_js')
+            ),
+            // 'war_pre_child_js' => [
+            //     'url' => get_template_directory_uri() . '/inc/angular/war-pre-child.js',
+            //     'depends' => [ 'war_angular_js' ]
+            // ]
+            'war_extend_init' => array(
+                'url' => get_template_directory_uri().'/inc/angular/source/WarExtendInit.js',
+                'depends' => array('war_angular_js')
+            ),
+            'war_extend_routes' => array(
+                'url' => get_template_directory_uri().'/inc/angular/source/WarRoutes.js'
+            )
         );
     }
 endif;
 
+
 if ( ! function_exists( 'war_bottom_parent_scripts' ) ) :
     function war_bottom_parent_scripts() {
         return array(
-            'war_post_child_js' => [
-                'url' => get_template_directory_uri() . '/inc/angular/war-post-child.js',
-                'depends' => [ 'war_pre_child_js' ]
-            ]
-            // 'war_extend_configs' => array(
-            //     'url' => get_template_directory_uri().'/inc/angular/WarConfigs.js',
-            //     'depends' => 'war_extend_routes'
-            // ),
-            // 'war_extend_factories' => array(
-            //     'url' => get_template_directory_uri().'/inc/angular/WarFactories.js',
-            // ),
-            // 'war_extend_controllers' => array(
-            //     'url' => get_template_directory_uri().'/inc/angular/WarControllers.js',
-            // ),
-            // 'war_extend_directives' => array(
-            //     'url' => get_template_directory_uri().'/inc/angular/WarDirectives.js',
-            // )
+            // 'war_post_child_js' => [
+            //     'url' => get_template_directory_uri() . '/inc/angular/war-post-child.js',
+            //     'depends' => [ 'war_pre_child_js' ]
+            // ]
+            'war_extend_configs' => array(
+                'url' => get_template_directory_uri().'/inc/angular/source/WarConfigs.js',
+                'depends' => 'war_extend_routes'
+            ),
+            'war_extend_factories' => array(
+                'url' => get_template_directory_uri().'/inc/angular/source/WarFactories.js',
+            ),
+            'war_extend_controllers' => array(
+                'url' => get_template_directory_uri().'/inc/angular/source/WarControllers.js',
+            ),
+            'war_extend_directives' => array(
+                'url' => get_template_directory_uri().'/inc/angular/source/WarDirectives.js',
+            )
         );
     }
 endif;
@@ -109,7 +119,7 @@ endif;
 if( ! function_exists( 'war_script_registrar' ) ):
     function war_script_registrar( $scripts = array() ){
         foreach($scripts as $s=>$d){
-            $depends = (isset($d["depends"]) && is_array($d["depends"])) ? $d["depends"] : array('war_pre_child_js');
+            $depends = (isset($d["depends"]) && is_array($d["depends"])) ? $d["depends"] : array('war_extend_init');
             wp_register_script($s,$d["url"],$depends,null,true);
             wp_enqueue_script($s,$s);
         }

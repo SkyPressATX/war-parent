@@ -10,22 +10,26 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
             "footer": {templateUrl: $warObject.warPath+"/inc/templates/footer.html", controller: 'footerController'},
         },
         resolve: {
-            warOptions: ['$rootScope', '$apiCall', '$userRole', function($rootScope, $apiCall, $userRole){
-                return $apiCall.get('/site-options').then(function( options ){
-                    $rootScope.siteOptions = options.siteOptions;
-                    $rootScope.themeOptions = options.themeOptions;
-                    $rootScope.adminOptions = options.adminOptions;
-                    if(options.siteOptions.currentUser){
-                        $rootScope.isAdministrator = $userRole.boolRoleCheck('administrator'); //Set isAdministrator
-                    }
-                    return true;
-                });
+            warOptions: ['$rootScope', '$userRole', '$warClient', function($rootScope, $userRole, $warClient ){
+                return $warClient.name( $warObject.api_namespace ).siteOptions.get()
+                    .then(function( options ){
+                        $rootScope.siteOptions = options.siteOptions;
+                        $rootScope.themeOptions = options.themeOptions;
+                        $rootScope.adminOptions = options.adminOptions;
+                        if(options.siteOptions.currentUser){
+                            $rootScope.isAdministrator = $userRole.boolRoleCheck('administrator'); //Set isAdministrator
+                        }
+                        return true;
+                    })
+                    .catch(function( err ){ console.log( err ); });
             }],
-            warMenu: ['$rootScope', '$apiCall', '$userRole', function($rootScope, $apiCall, $userRole){
-                return $apiCall.get('/menu').then(function(headerMenu){
+            warMenu: ['$rootScope', '$warClient', '$userRole', function($rootScope, $warClient, $userRole){
+                return $warClient.name( $warObject.api_namespace ).menu.get()
+                .then(function(headerMenu){
                     $rootScope.headerMenu = headerMenu;
                     return true;
-                });
+                })
+                .catch(function( err ){ console.log( err ); });
             }]
         }
     });
