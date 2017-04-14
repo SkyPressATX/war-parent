@@ -38,11 +38,8 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
         url: '/',
         resolve: {
 			pageResolve: ['$apiCall','$stateParams',function($apiCall,$stateParams){
-				return $apiCall.get('/homepage').then(function(resp){
-                    if( resp == "0" ) return false;
-                    return $apiCall.getLocal( '/wp/v2/pages/' + resp ).then( function( res ){
-                        return res;
-                    }, function( err ){ return err; });
+                return $apiCall.getLocal( '/wp/v2/pages?slug=home' ).then( function( res ){
+                    return res;
                 }, function( err ){ return err; });
 			}]
 		},
