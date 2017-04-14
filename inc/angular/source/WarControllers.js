@@ -49,4 +49,11 @@ extend.controller('adminController', [
 .controller('footerController',[
     '$scope',
     function($scope){ }
+])
+.controller('generalController',[
+    '$scope',
+    'generalResolve',
+    function( $scope, generalResolve ){
+        $scope.itemResolved = generalResolve;
+    }
 ]);
