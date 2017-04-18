@@ -9,18 +9,6 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
         }
     };
 
-    var genericResolve = {
-        generalResolve: [ '$warClient', function( $warClient ){
-            return $warClient.name( 'wp/v2' ).pages.get( { slug: 'home', '_embed': true } )
-                .then( function( found ){
-                    return found[ 0 ];
-                })
-                .catch( function( err ){
-                    return { Error: err };
-                });
-        }]
-    };
-
     $warRoutesProvider.addRoute('home', {
         url:"",
         abstract: true,
@@ -58,9 +46,9 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
         url: '/',
         resolve: {
             generalResolve: [ '$warClient', function( $warClient ){
-                return $warClient.name( 'wp/v2' ).pages.get( { slug: 'home', '_embed': true } )
+                return $warClient.name( $warObject.api_namespace ).home.get()
                     .then( function( found ){
-                        return found[ 0 ];
+                        return found;
                     })
                     .catch( function( err ){
                         return { Error: err };
@@ -105,7 +93,7 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
             generalResolve: [ '$warClient', '$stateParams', function( $warClient, $stateParams ){
                 return $warClient.name( 'wp/v2' ).posts.get( { slug: $stateParams.slug, '_embed': true } )
                     .then( function( found ){
-                        return found[ 0 ];
+                        return found[ 0 ]; //Should only be one
                     })
                     .catch( function( err ){
                         return { Error: err };
@@ -131,12 +119,6 @@ extend.config(['$warRoutesProvider','$warObject', function($warRoutesProvider,$w
         views: genericView
     });
 
-    $warRoutesProvider.addRoute('main', {
-        parent: 'home',
-        url: '/',
-        resolve: genericResolve,
-        views: genericView
-    });
     adminOptionsTemplateFn.$inject = ['$stateParams'];
     adminOptionsControllerFn.$inject = ['$stateParams'];
     function adminOptionsTemplateFn($stateParams){
